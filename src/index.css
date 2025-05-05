@@ -14,3 +14,30 @@
 } */
 
 @import "tailwindcss";
+
+html, body {
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  height: 100%;
+  position: fixed;
+  overflow: hidden;
+  -webkit-overflow-scrolling: none;
+  width: 100%;
+}
+
+/* Ensure card components receive touch events */
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+}
+
+/* Specific Android touch enhancements */
+@supports (-webkit-touch-callout: none) {
+  .swipeable-card-container {
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}

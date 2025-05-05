@@ -1,42 +1,48 @@
 import React from "react";
 
-type Props = {
-  product: {
-    id: number;
-    name: string;
-    brand: string;
-    price: number;
-    originalPrice: number;
-    discountPercentage: number;
-    imageUrl: string;
-  };
-};
-
-export default function ProductCard({ product }: Props) {
+ const ProductCard = ({ product }) => {
+  const discountPercentage = product.discountPercentage || 
+    (product.originalPrice && product.price 
+      ? Math.round((1 - product.price / product.originalPrice) * 100) 
+      : 0);
+  
   return (
-    <div className="bg-white rounded-2xl shadow-xl w-72 h-[480px] p-4 flex flex-col justify-between">
-      <img
-        src={product.imageUrl}
-        alt={product.name}
-        className="h-64 w-full object-cover rounded-xl"
-      />
-      <div className="mt-4 space-y-1">
-        <h2 className="text-lg font-semibold capitalize">{product.name}</h2>
-        <p className="text-sm text-gray-500">{product.brand}</p>
-        <div className="flex items-center space-x-2 mt-2">
-          <p className="text-xl font-bold text-black">₹{product.price}</p>
-          {product.discountPercentage > 0 && (
-            <>
-              <p className="line-through text-gray-400">
-                ₹{product.originalPrice}
-              </p>
-              <p className="text-green-500 font-semibold">
-                {product.discountPercentage}% off
-              </p>
-            </>
+    <div className="bg-white rounded-2xl shadow-xl overflow-hidden  w-72 max-w-full">
+      <div className="relative">
+        <img 
+          src={product.imageUrl} 
+          alt={product.name} 
+          className="w-full h-72 object-cover object-top"
+        />
+        
+        {discountPercentage > 0 && (
+          <div className="absolute top-4 right-4 bg-green-500 text-white text-sm font-bold px-2 py-1 rounded-full">
+            {discountPercentage}% OFF
+          </div>
+        )}
+      </div>
+      
+      <div className="p-4">
+        <p className="text-sm text-gray-500 font-medium">{product.brand}</p>
+        
+        <h3 className="font-bold text-lg mt-1 mb-1">{product.name}</h3>
+        
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>
+        
+        <div className="flex items-center">
+          <span className="text-xl font-bold text-gray-900">
+            ${product.price?.toFixed(2) || product.originalPrice?.toFixed(2)}
+          </span>
+          
+          {product.originalPrice && (
+            <span className="ml-2 text-sm text-gray-500 line-through">
+              ${product.originalPrice.toFixed(2)}
+            </span>
           )}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default ProductCard;

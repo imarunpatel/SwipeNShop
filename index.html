@@ -2,12 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Prevent default touch behavior on Android
+      document.addEventListener('touchmove', function(e) {
+        if (e.target.closest('.swipeable-card-container')) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+  
+      // Prevent double-tap to zoom
+      document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        const DOUBLE_TAP_THRESHOLD = 300;
+        
+        if (window.lastTouchEnd && (now - window.lastTouchEnd) < DOUBLE_TAP_THRESHOLD) {
+          e.preventDefault();
+        }
+        
+        window.lastTouchEnd = now;
+      }, { passive: false });
+    </script>
   </body>
 </html>

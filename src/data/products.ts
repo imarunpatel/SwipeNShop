@@ -77,7 +77,7 @@ export const products = [
       "brand": "chemistry india",
       "price": 4500,
       "originalPrice": 6000,
-      "discountPercentage": 25,
+      // "discountPercentage": 25,
       "imageUrl": "https://cdn.shopify.com/s/files/1/0605/1509/0592/files/CJ24AW005_2.jpg?v=1743502223"
     },
     {
