@@ -1,18 +1,22 @@
 import React from "react";
+import { IProduct } from "../model/Protuct";
 
- const ProductCard = ({ product }) => {
+ interface ProductCardProps {
+   product: IProduct;
+ }
+ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const discountPercentage = product.discountPercentage || 
     (product.originalPrice && product.price 
       ? Math.round((1 - product.price / product.originalPrice) * 100) 
       : 0);
   
   return (
-    <div className="bg-white rounded-2xl shadow-xl overflow-hidden  w-72 max-w-full">
+    <div className="bg-white rounded-2xl shadow-xl overflow-hidden w-72 max-w-full">
       <div className="relative">
         <img 
           src={product.imageUrl} 
           alt={product.name} 
-          className="w-full h-72 object-cover object-top"
+          className="w-full h-92 object-cover object-top"
         />
         
         {discountPercentage > 0 && (
@@ -26,8 +30,6 @@ import React from "react";
         <p className="text-sm text-gray-500 font-medium">{product.brand}</p>
         
         <h3 className="font-bold text-lg mt-1 mb-1">{product.name}</h3>
-        
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>
         
         <div className="flex items-center">
           <span className="text-xl font-bold text-gray-900">

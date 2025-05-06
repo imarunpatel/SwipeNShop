@@ -1,34 +1,45 @@
 import React, { useEffect, useRef, useState } from "react";
-import { products } from "../data/products";
 import ProductCard from './ProductCard';
+import { IProduct } from "../model/Protuct";
+import { useCart } from "../context/CartContext";
 
-export default function SwipeableCards() {
-  const [cards, setCards] = useState(products);
-  const [startX, setStartX] = useState(0);
-  const [startY, setStartY] = useState(0);
-  const [offsetX, setOffsetX] = useState(0);
-  const [offsetY, setOffsetY] = useState(0);
-  const [activeCard, setActiveCard] = useState(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [swipeDirection, setSwipeDirection] = useState(null);
-  const [isAnimating, setIsAnimating] = useState(false);
+interface SwipeableCardsProps {
+  products: IProduct[]
+}
+type SwipeDirection = "left" | "right" | "up" | null;
+
+const SwipeableCards:  React.FC<SwipeableCardsProps> = ({ products }) => {
+  const { addToCart } = useCart();
+  const [cards, setCards] = useState<IProduct[]>(products);
+  const [startX, setStartX] = useState<number>(0);
+  const [startY, setStartY] = useState<number>(0);
+  const [offsetX, setOffsetX] = useState<number>(0);
+  const [offsetY, setOffsetY] = useState<number>(0);
+  const [activeCard, setActiveCard] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [swipeDirection, setSwipeDirection] = useState<SwipeDirection>(null);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
   
 
-  const currentOffsetX = useRef(0);
-  const currentOffsetY = useRef(0);
+  const currentOffsetX = useRef<number>(0);
+  const currentOffsetY = useRef<number>(0);
 
-  const handleSwipe = (dir, id) => {
+  const handleSwipe = (dir: SwipeDirection, id: number): void => {
     setIsAnimating(true);
     setSwipeDirection(dir);
 
-    console.log(
-      dir === "right"
-        ? `Liked Product ID: ${id}`
-        : dir === "left"
-        ? `Passed Product ID: ${id}`
-        : `Add to cart Product ID: ${id}`
-    );
     
+    if (dir === "right") {
+      console.log(`Liked Product ID: ${id}`);
+    } else if (dir === "left") {
+      console.log(`Passed Product ID: ${id}`);
+    } else if (dir === "up") {
+      console.log(`Add to cart Product ID: ${id}`);
+      const swipedProduct = cards.find(card => card.id === id);
+      if(swipedProduct)
+        addToCart(swipedProduct);
+    }
+
     setTimeout(() => {
       setCards((prev) => prev.filter((card) => card.id !== id));
       setOffsetX(0);
@@ -41,7 +52,7 @@ export default function SwipeableCards() {
     }, 300);
   };
   
-  const handleMouseDown = (e, id) => {
+  const handleMouseDown = (e: React.MouseEvent, id: number) => {
     e.preventDefault();
     setStartX(e.clientX);
     setStartY(e.clientY);
@@ -49,11 +60,11 @@ export default function SwipeableCards() {
     setIsDragging(true);
 
     currentOffsetX.current = 0;
-      currentOffsetY.current = 0;
+    currentOffsetY.current = 0;
   };
   
   const handleTouchStart = (e, id) => {
-    e.preventDefault();
+    // e.preventDefault();
     setStartX(e.touches[0].clientX);
     setStartY(e.touches[0].clientY);
     setActiveCard(id);
@@ -137,17 +148,17 @@ export default function SwipeableCards() {
     if (absX < 50 && absY < 50) return null;
     
     // Determine primary direction
-    if (absY > absX && offsetY < 0) return "up"; // Up swipe
-    else if (offsetX > 0) return "right"; // Right swipe
-    else if (offsetX < 0) return "left"; // Left swipe
+    if (absY > absX && offsetY < 0) return "up";
+    else if (offsetX > 0) return "right";
+    else if (offsetX < 0) return "left";
     
     return null;
   };
 
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-50 px-4 py-8 swipeable-card-container">
+    <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-50 px-4 py-1 swipeable-card-container">
       {/* Card Stack */}
-      <div className="relative w-full max-w-sm h-[550px] flex items-center justify-center">
+      <div className="relative w-full max-w-sm flex flex-1 items-center justify-center">
         {cards.map((product, index) => {
           const isTop = index === cards.length - 1;
           
@@ -214,7 +225,7 @@ export default function SwipeableCards() {
                   
                   {/* Add to cart indicator */}
                   <div 
-                    className={`absolute -bottom-6 left-1/2 p-3 rounded-full bg-blue-500 text-white font-bold transform -translate-x-1/2 transition-opacity
+                    className={`absolute bottom-1/2 left-1/2 p-3 rounded-full bg-blue-500 text-white font-bold transform -translate-x-1/2 transition-opacity
                       ${(getIndicatorType() === 'up' || swipeDirection === 'up') ? 'opacity-100' : 'opacity-0'}`}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -231,10 +242,10 @@ export default function SwipeableCards() {
           <div className="text-center p-8">
             <div className="text-gray-400 text-6xl mb-4">🛍️</div>
             <h3 className="font-bold text-xl mb-2">No More Products</h3>
-            <p className="text-gray-500">You've viewed all available products</p>
+            <p className="text-gray-500">You've viewed all available products11</p>
             <button 
               onClick={() => setCards(products)}
-              className="mt-6 px-6 py-2 bg-blue-500 text-white font-medium rounded-full hover:bg-blue-600 transition-colors"
+              className="mt-6 px-6 py-2 bg-[#ff444f] text-white font-medium rounded-full hover:bg-blue-600 transition-colors"
             >
               Start Over
             </button>
@@ -244,27 +255,31 @@ export default function SwipeableCards() {
       
       {/* Instructions */}
       {cards.length > 0 && (
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-6 text-sm text-gray-500">
-          <div className="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            <span>Pass</span>
-          </div>
-          <div className="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-            </svg>
-            <span>Cart</span>
-          </div>
-          <div className="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-            <span>Like</span>
+        <div className="relative h-10 w-full">
+          <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-6 text-sm text-gray-500">
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              <span>Pass</span>
+            </div>
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+              <span>Cart</span>
+            </div>
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+              <span>Like</span>
+            </div>
           </div>
         </div>
       )}
     </div>
   );
 }
+
+export default SwipeableCards;
