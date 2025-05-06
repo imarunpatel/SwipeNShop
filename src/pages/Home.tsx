@@ -4,7 +4,7 @@ import { products } from '../data/products';
 
 const Home = () => {
   return (
-    <div className='h-[calc(100vh-4rem)] flex justify-center items-center'>
+    <div className='h-[calc(100dvh-4rem)] flex justify-center items-center'>
         <SwipeableCards products={products} />
     </div>
   )
