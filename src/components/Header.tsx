@@ -7,7 +7,7 @@ const Header = () => {
   const { cartItems, totalItems, totalPrice } = useCart();
 
   return (
-    <header className="bg-gray-50 h-16">
+    <header className="bg-gray-50 max-w-sm mx-auto h-16">
       <div className="container relative mx-auto max-w-sm px-4  flex justify-center items-center">
         <img src={Logo} alt="" className='pt-5' />
         

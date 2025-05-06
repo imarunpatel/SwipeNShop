@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import { IProduct } from "../model/Protuct";
+import { IProduct } from "../model/Product";
 
 
 

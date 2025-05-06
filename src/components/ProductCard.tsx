@@ -1,5 +1,5 @@
 import React from "react";
-import { IProduct } from "../model/Protuct";
+import { IProduct } from "../model/Product";
 
  interface ProductCardProps {
    product: IProduct;
@@ -27,9 +27,10 @@ import { IProduct } from "../model/Protuct";
       </div>
       
       <div className="p-4">
-        <p className="text-sm text-gray-500 font-medium">{product.brand}</p>
         
-        <h3 className="font-bold text-lg mt-1 mb-1">{product.name}</h3>
+        <h3 className="font-bold text-lg mb-1 line-h leading-5.5 capitalize">{product.name}</h3>
+
+        <p className="text-sm text-gray-500 font-medium">{product.brand}</p>
         
         <div className="flex items-center">
           <span className="text-xl font-bold text-gray-900">

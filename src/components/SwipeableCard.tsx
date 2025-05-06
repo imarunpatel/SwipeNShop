@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ProductCard from './ProductCard';
-import { IProduct } from "../model/Protuct";
+import { IProduct } from "../model/Product";
 import { useCart } from "../context/CartContext";
 
 interface SwipeableCardsProps {
@@ -143,7 +143,6 @@ const SwipeableCards:  React.FC<SwipeableCardsProps> = ({ products }) => {
     // Use absolute values for better threshold comparison
     const absX = Math.abs(offsetX);
     const absY = Math.abs(offsetY);
-    
     // Only show indicator if we exceed the threshold
     if (absX < 50 && absY < 50) return null;
     
@@ -242,7 +241,7 @@ const SwipeableCards:  React.FC<SwipeableCardsProps> = ({ products }) => {
           <div className="text-center p-8">
             <div className="text-gray-400 text-6xl mb-4">🛍️</div>
             <h3 className="font-bold text-xl mb-2">No More Products</h3>
-            <p className="text-gray-500">You've viewed all available products11</p>
+            <p className="text-gray-500">You've viewed all available products</p>
             <button 
               onClick={() => setCards(products)}
               className="mt-6 px-6 py-2 bg-[#ff444f] text-white font-medium rounded-full hover:bg-blue-600 transition-colors"
@@ -255,8 +254,7 @@ const SwipeableCards:  React.FC<SwipeableCardsProps> = ({ products }) => {
       
       {/* Instructions */}
       {cards.length > 0 && (
-        <div className="relative h-10 w-full">
-          <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-6 text-sm text-gray-500">
+          <div className="w-full  max-w-sm pb-5  flex justify-center space-x-6 text-sm text-gray-500">
             <div className="flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -276,7 +274,6 @@ const SwipeableCards:  React.FC<SwipeableCardsProps> = ({ products }) => {
               <span>Like</span>
             </div>
           </div>
-        </div>
       )}
     </div>
   );

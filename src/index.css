@@ -10,6 +10,7 @@ html, body {
   position: fixed;
   overflow: hidden;
   -webkit-overflow-scrolling: none;
+  background-color: #ff444f;
 }
 
 /* Ensure card components receive touch events */
